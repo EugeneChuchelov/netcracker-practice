@@ -45,15 +45,18 @@ public class DwellingFloor {
         return flats;
     }
 
-    public Flat getFlat(int flatNumber){
-        return flats[flatNumber];
+    public Flat getFlat(int number){
+        testNumber(number);
+        return flats[number];
     }
 
-    public void setFlat(int flatNumber, Flat flat){
-        flats[flatNumber] = flat;
+    public void setFlat(int number, Flat flat){
+        testNumber(number);
+        flats[number] = flat;
     }
 
     public void add(int number, Flat flat){
+        testNumber(number);
         Flat[] itemsToShift = new Flat[size - number];
         System.arraycopy(flats, number, itemsToShift, 0, size - number);
         size = number + 1;
@@ -71,13 +74,23 @@ public class DwellingFloor {
         flats = newFlats;
         size++;
     }
-    //todo создание массива кваритр и изменение - это изменение самого массива
+
     public void remove(int number) {
+        testNumber(number);
         Flat[] newFlats = new Flat[size - 1];
         System.arraycopy(flats,0,newFlats,0, number);
         System.arraycopy(flats, number + 1, newFlats, number, size - number - 1);
         flats = newFlats;
         size--;
+    }
+
+    private void testNumber(int number){
+        if(number >= size){
+            throw new SpaceIndexOutOfBoundsException("Floor don't have enough flats");
+        }
+        if(number < 0){
+            throw new SpaceIndexOutOfBoundsException("Flats numbers starts on 0");
+        }
     }
 
     public Flat getBestSpace(){

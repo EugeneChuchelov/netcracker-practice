@@ -54,11 +54,22 @@ public class Dwelling {
     }
 
     public DwellingFloor getFloor(int number){
+        testNumber(number);
         return floors[number];
     }
 
     public void setFloor(int number, DwellingFloor floor){
+        testNumber(number);
         floors[number] = floor;
+    }
+
+    private void testNumber(int number){
+        if(number >= floors.length){
+            throw new FloorIndexOutOfBoundsException("Building don't have enough floors");
+        }
+        if(number < 0){
+            throw new FloorIndexOutOfBoundsException("Floors numbers starts on 0");
+        }
     }
 
     public Flat getFlat(int number){
@@ -66,7 +77,7 @@ public class Dwelling {
         return getFloor(floorAndNumber[0]).getFlat(floorAndNumber[1]);
     }
 
-    public int[] getNumberOnFloor(int number){
+    private int[] getNumberOnFloor(int number){
         int[] floorAndNumber = new int[2];
         int i =0;
         for (DwellingFloor floor : floors) {

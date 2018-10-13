@@ -1,36 +1,34 @@
 package buildings;
 
-public class Flat {
-    private float flatArea;
+public class Office {
+    private float officeArea;
     private int roomsQuantity;
-    private static final float DEFAULT_AREA = 50;
-    private static final int DEFAULT_ROOMS = 2;
+    private static final float DEFAULT_AREA = 250;
+    private static final int DEFAULT_ROOMS = 1;
 
-    public Flat(){
+    public Office(){
         this(DEFAULT_AREA, DEFAULT_ROOMS);
     }
-
-    public Flat(float area){
+    public Office(float area){
         this(area, DEFAULT_ROOMS);
     }
-
-    public Flat(float area, int rooms){
+    public Office(float area, int rooms){
         if(area <= 0){
             throw new InvalidSpaceAreaException("Area must be > 0");
         }
         if(rooms <= 0){
             throw new InvalidRoomsCountException("Rooms quantity must be > 0");
         }
-        flatArea = area;
+        officeArea = area;
         roomsQuantity = rooms;
     }
 
-    public float getFlatArea() {
-        return flatArea;
+    public float getOfficeArea() {
+        return officeArea;
     }
 
-    public void setFlatArea(float flatArea) {
-        this.flatArea = flatArea;
+    public void setOfficeArea(float officeArea) {
+        this.officeArea = officeArea;
     }
 
     public int getRoomsQuantity() {
