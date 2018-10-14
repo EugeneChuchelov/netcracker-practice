@@ -178,19 +178,6 @@ public class OfficeBuilding implements Building {
             z = node.value.getSize();
         }
 
-        Space swapBuf;
-        for(int i = offices.length - 1; i > 0; i--)
-        {
-            for(int j = 0; j < i; j++)
-            {
-                if(offices[j].getArea() < offices[j+1].getArea())
-                {
-                    swapBuf = offices[j];
-                    offices[j] = offices[j+1];
-                    offices[j+1] = swapBuf;
-                }
-            }
-        }
-        return offices;
+        return Utils.sortByArea(offices);
     }
 }

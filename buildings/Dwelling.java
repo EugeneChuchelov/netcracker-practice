@@ -126,19 +126,6 @@ public class Dwelling implements Building {
             z = floor.getSize();
         }
 
-        Space swapBuf;
-        for(int i = flats.length - 1; i > 0; i--)
-        {
-            for(int j = 0; j < i; j++)
-            {
-                if(flats[j].getArea() < flats[j+1].getArea())
-                {
-                    swapBuf = flats[j];
-                    flats[j] = flats[j+1];
-                    flats[j+1] = swapBuf;
-                }
-            }
-        }
-        return flats;
+        return Utils.sortByArea(flats);
     }
 }
