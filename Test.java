@@ -14,13 +14,17 @@ public class Test {
         int[] qw = {2, 2};
         OfficeBuilding b = new OfficeBuilding(2, qw);
 
-        f0.setOffice(o00, 0);
-        f0.setOffice(o01, 1);
-        f1.setOffice(o10, 0);
-        f1.setOffice(o11, 1);
-        b.setFloor(f0,0);
-        b.setFloor(f1,1);
+        f0.setSpace(0, o00);
+        f0.setSpace(1, o01);
+        f1.setSpace(0, o10);
+        f1.setSpace(1, o11);
+        b.setFloor(0, f0);
+        b.setFloor(1, f1);
 
+        b.getSpace(3);
 
+        b.addSpace(4, od);
+
+        b.removeSpace(3);
     }
 }

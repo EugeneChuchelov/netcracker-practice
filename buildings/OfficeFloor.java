@@ -1,28 +1,27 @@
 package buildings;
 
-public class OfficeFloor {
+public class OfficeFloor implements Floor {
     private class ListNode{
         ListNode next;
-        Office value;
+        Space value;
         ListNode(){}
-        ListNode(Office value){
+        ListNode(Space value){
             this.value = value;
         }
     }
 
     private int size;
     private ListNode head;
-    //private ListNode tail;
 
     public OfficeFloor(int officesQuantity){
         for (int i = 0; i < officesQuantity; i++){
-            add(new ListNode(new Office()), i);
+            addNode(i, new ListNode(new Office()));
         }
     }
 
-    public OfficeFloor(Office[] offices){
+    public OfficeFloor(Space[] offices){
         for (int i = 0; i < offices.length; i++){
-            add(new ListNode(offices[i]), i);
+            addNode(i, new ListNode(offices[i]));
         }
     }
 
@@ -34,14 +33,12 @@ public class OfficeFloor {
         return current;
     }
 
-    private void add(ListNode node, int index){
+    private void addNode(int index, ListNode node){
         if(index == 0){
             node.next = head;
             head = node;
         } else if(index == size){
             getNode(index - 1).next = node;
-            //tail.next = newNode;
-            //tail = newNode;
         } else {
             getNode(index - 1).next = node;
             node.next = getNode(index + 1);
@@ -54,7 +51,6 @@ public class OfficeFloor {
             head = head.next;
         } else if(index == size){
             getNode(index - 1).next = null;
-            //tail = getNode(index - 1);
         } else {
             getNode(index - 1).next = getNode(index + 1);
         }
@@ -68,7 +64,7 @@ public class OfficeFloor {
     public float getAreaTotal(){
         float area = 0;
         for(ListNode node = head; node != null; node = node.next){
-            area += node.value.getOfficeArea();
+            area += node.value.getArea();
         }
         return area;
     }
@@ -81,8 +77,8 @@ public class OfficeFloor {
         return rooms;
     }
 
-    public Office[] toArray(){
-        Office[] array = new Office[size];
+    public Space[] toArray(){
+        Space[] array = new Space[size];
         int i = 0;
         for(ListNode node = head; node != null; node = node.next){
             array[i] = node.value;
@@ -91,19 +87,19 @@ public class OfficeFloor {
         return array;
     }
 
-    public Office getOffice(int number){
+    public Space getSpace(int number){
         testNumber(number);
-       return getNode(number).value;
+        return getNode(number).value;
     }
 
-    public void setOffice(Office office, int number){
+    public void setSpace(int number, Space office){
         testNumber(number);
         getNode(number).value = office;
     }
 
-    public void addOffice(Office office, int number){
+    public void add(int number, Space office){
         testNumber(number);
-        add(new ListNode(office), number);
+        addNode(number, new ListNode(office));
     }
 
     public void remove(int number){
@@ -112,7 +108,7 @@ public class OfficeFloor {
     }
 
     private void testNumber(int number){
-        if(number >= size){
+        if(number > size){
             throw new SpaceIndexOutOfBoundsException("Floor don't have enough offices");
         }
         if(number < 0){
@@ -120,10 +116,10 @@ public class OfficeFloor {
         }
     }
 
-    public Office getBestSpace(){
-        Office bestOffice = head.value;
+    public Space getBestSpace(){
+        Space bestOffice = head.value;
         for(ListNode node = head; node != null; node = node.next){
-            if(node.value.getOfficeArea() > bestOffice.getOfficeArea()){
+            if(node.value.getArea() > bestOffice.getArea()){
                 bestOffice = node.value;
             }
         }

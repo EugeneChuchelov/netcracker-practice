@@ -1,6 +1,6 @@
 package buildings;
 
-public class Office {
+public class Office implements Space {
     private float officeArea;
     private int roomsQuantity;
     private static final float DEFAULT_AREA = 250;
@@ -23,11 +23,11 @@ public class Office {
         roomsQuantity = rooms;
     }
 
-    public float getOfficeArea() {
+    public float getArea() {
         return officeArea;
     }
 
-    public void setOfficeArea(float officeArea) {
+    public void setArea(float officeArea) {
         this.officeArea = officeArea;
     }
 

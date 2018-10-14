@@ -1,12 +1,12 @@
 package buildings;
 
-public class OfficeBuilding {
+public class OfficeBuilding implements Building {
     private class ListNode{
         ListNode next;
         ListNode previous;
-        OfficeFloor value;
+        Floor value;
         ListNode(){}
-        ListNode(OfficeFloor value){
+        ListNode(Floor value){
             this.value = value;
         }
     }
@@ -16,13 +16,13 @@ public class OfficeBuilding {
 
     public OfficeBuilding(int floors, int[] officesOnFloors){
         for(int i = 0; i < floors; i++){
-            add(new ListNode(new OfficeFloor(officesOnFloors[i])), i);
+            addNode(i, new ListNode(new OfficeFloor(officesOnFloors[i])));
         }
     }
 
-    public OfficeBuilding(OfficeFloor[] floors){
+    public OfficeBuilding(Floor[] floors){
         for(int i = 0; i< floors.length; i++){
-            add(new ListNode(floors[i]), i);
+            addNode(i, new ListNode(floors[i]));
         }
     }
 
@@ -34,7 +34,7 @@ public class OfficeBuilding {
         return current;
     }
 
-    private void add(ListNode node, int index){
+    private void addNode(int index, ListNode node){
         if(index == 0){
             if(head != null){
                 node.next = head;
@@ -60,7 +60,6 @@ public class OfficeBuilding {
             head = head.next;
         } else if(index == size){
             getNode(index - 1).next = null;
-            //tail = getNode(index - 1);
         } else {
             getNode(index - 1).next = getNode(index + 1);
             getNode(index + 1).previous = getNode(index - 1);
@@ -72,7 +71,7 @@ public class OfficeBuilding {
         return size;
     }
 
-    public int getOfficesQuantity(){
+    public int getSpacesQuantity(){
         int quantity = 0;
         for(ListNode node = head; node != null; node = node.next){
             quantity += node.value.getSize();
@@ -96,8 +95,8 @@ public class OfficeBuilding {
         return rooms;
     }
 
-    public OfficeFloor[] toArray(){
-        OfficeFloor[] floors = new OfficeFloor[size];
+    public Floor[] toArray(){
+        Floor[] floors = new Floor[size];
         int i = 0;
         for(ListNode node = head; node != null; node = node.next){
             floors[i] = node.value;
@@ -106,12 +105,12 @@ public class OfficeBuilding {
         return floors;
     }
 
-    public OfficeFloor getFloor(int number){
+    public Floor getFloor(int number){
         testNumber(number);
         return getNode(number).value;
     }
 
-    public void setFloor(OfficeFloor floor, int number){
+    public void setFloor(int number, Floor floor){
         testNumber(number);
         getNode(number).value = floor;
     }
@@ -125,22 +124,22 @@ public class OfficeBuilding {
         }
     }
 
-    public Office getOffice(int number){
+    public Space getSpace(int number){
         int[] floorAndNumber = getNumberOnFloor(number);
-        return getFloor(floorAndNumber[0]).getOffice(floorAndNumber[1]);
+        return getFloor(floorAndNumber[0]).getSpace(floorAndNumber[1]);
     }
 
-    public void setOffice(Office office, int number){
+    public void setSpace(int number, Space office){
         int[] floorAndNumber = getNumberOnFloor(number);
-        getFloor(floorAndNumber[0]).setOffice(office, floorAndNumber[1]);
+        getFloor(floorAndNumber[0]).setSpace(floorAndNumber[1], office);
     }
 
-    public void addOffice(Office office, int number){
+    public void addSpace(int number, Space office){
         int[] floorAndNumber = getNumberOnFloor(number);
-        getFloor(floorAndNumber[0]).addOffice(office, floorAndNumber[1]);
+        getFloor(floorAndNumber[0]).add(floorAndNumber[1], office);
     }
 
-    public void removeOffice(int number){
+    public void removeSpace(int number){
         int[] floorAndNumber = getNumberOnFloor(number);
         getFloor(floorAndNumber[0]).remove(floorAndNumber[1]);
     }
@@ -149,7 +148,7 @@ public class OfficeBuilding {
         int[] floorAndNumber = new int[2];
         int i = 0;
         for(ListNode node = head; node != null; node = node.next){
-            if(number < node.value.getSize()){
+            if(number <= node.value.getSize()){
                 floorAndNumber[0] = i;
                 floorAndNumber[1] = number;
                 break;
@@ -161,30 +160,30 @@ public class OfficeBuilding {
         return floorAndNumber;
     }
 
-    public Office getBestSpace(){
-        Office best = new Office(0,0);
+    public Space getBestSpace(){
+        Space best = new Office(0,0);
         for(ListNode node = head; node != null; node = node.next){
-            if(node.value.getBestSpace().getOfficeArea() > best.getOfficeArea()){
+            if(node.value.getBestSpace().getArea() > best.getArea()){
                 best = node.value.getBestSpace();
             }
         }
         return best;
     }
 
-    public Office[] getSortedOffices(){
-        Office[] offices = new Office[getOfficesQuantity()];
+    public Space[] getSpacesSorted(){
+        Space[] offices = new Space[getSpacesQuantity()];
         int z = 0;
         for(ListNode node = head; node != null; node = node.next){
             System.arraycopy(node.value.toArray(), 0, offices, z, node.value.getSize());
             z = node.value.getSize();
         }
 
-        Office swapBuf;
+        Space swapBuf;
         for(int i = offices.length - 1; i > 0; i--)
         {
             for(int j = 0; j < i; j++)
             {
-                if(offices[j].getOfficeArea() < offices[j+1].getOfficeArea())
+                if(offices[j].getArea() < offices[j+1].getArea())
                 {
                     swapBuf = offices[j];
                     offices[j] = offices[j+1];

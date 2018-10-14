@@ -1,7 +1,7 @@
 package buildings;
 
-public class DwellingFloor {
-    private Flat[] flats;
+public class DwellingFloor implements Floor {
+    private Space[] flats;
     private static final int DEFAULT_FLATS = 4;
     private int size;
 
@@ -10,52 +10,52 @@ public class DwellingFloor {
     }
 
     public DwellingFloor(int flatsQuantity){
-        flats = new Flat[flatsQuantity];
+        flats = new Space[flatsQuantity];
         for(int i = 0; i < flatsQuantity; i++){
             flats[i] = new Flat();
         }
     }
 
-    public DwellingFloor(Flat[] flats) {
+    public DwellingFloor(Space[] flats) {
         flats = new Flat[flats.length];
         System.arraycopy(flats, 0, this.flats, 0, flats.length);
     }
 
-    public int getFlatsQuantity(){
+    public int getSize(){
         return size;
     }
 
-    public float getTotalArea(){
+    public float getAreaTotal(){
         float totalArea = 0;
-        for(Flat flat : flats){
-            totalArea += flat.getFlatArea();
+        for(Space flat : flats){
+            totalArea += flat.getArea();
         }
         return totalArea;
     }
 
-    public int getTotalRoomsQuantity(){
+    public int getRoomsTotal(){
         int totalRoomsQuantity = 0;
-        for(Flat flat : flats){
+        for(Space flat : flats){
             totalRoomsQuantity += flat.getRoomsQuantity();
         }
         return totalRoomsQuantity;
     }
 
-    public Flat[] getFlats() {
+    public Space[] toArray() {
         return flats;
     }
 
-    public Flat getFlat(int number){
+    public Space getSpace(int number){
         testNumber(number);
         return flats[number];
     }
 
-    public void setFlat(int number, Flat flat){
+    public void setSpace(int number, Space flat){
         testNumber(number);
         flats[number] = flat;
     }
 
-    public void add(int number, Flat flat){
+    public void add(int number, Space flat){
         testNumber(number);
         Flat[] itemsToShift = new Flat[size - number];
         System.arraycopy(flats, number, itemsToShift, 0, size - number);
@@ -66,9 +66,9 @@ public class DwellingFloor {
         }
     }
 
-    private void add(Flat flat)
+    private void add(Space flat)
     {
-        Flat[] newFlats = new Flat[size + 1];
+        Space[] newFlats = new Space[size + 1];
         System.arraycopy(flats, 0, newFlats, 0, size);
         newFlats[size] = flat;
         flats = newFlats;
@@ -77,7 +77,7 @@ public class DwellingFloor {
 
     public void remove(int number) {
         testNumber(number);
-        Flat[] newFlats = new Flat[size - 1];
+        Space[] newFlats = new Space[size - 1];
         System.arraycopy(flats,0,newFlats,0, number);
         System.arraycopy(flats, number + 1, newFlats, number, size - number - 1);
         flats = newFlats;
@@ -93,10 +93,10 @@ public class DwellingFloor {
         }
     }
 
-    public Flat getBestSpace(){
+    public Space getBestSpace(){
         int number = 0;
         for (int i = 0; i < size; i++){
-            if(flats[i].getFlatArea() > flats[number].getFlatArea()){
+            if(flats[i].getArea() > flats[number].getArea()){
                 number = i;
             }
         }
