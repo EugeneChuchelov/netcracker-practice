@@ -40,8 +40,8 @@ public class OfficeFloor implements Floor {
         } else if(index == size){
             getNode(index - 1).next = node;
         } else {
+            node.next = getNode(index);
             getNode(index - 1).next = node;
-            node.next = getNode(index + 1);
         }
         size++;
     }
@@ -124,5 +124,14 @@ public class OfficeFloor implements Floor {
             }
         }
         return bestOffice;
+    }
+
+    public String toString(){
+        StringBuilder output = new StringBuilder("Office floor: ");
+        output.append(size).append(" spaces\n");
+        for(ListNode node = head; node != null; node = node.next){
+            output.append(node.value.toString()).append("\n");
+        }
+        return output.toString();
     }
 }

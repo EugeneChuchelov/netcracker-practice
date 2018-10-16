@@ -13,6 +13,7 @@ public class DwellingFloor implements Floor {
         flats = new Space[flatsQuantity];
         for(int i = 0; i < flatsQuantity; i++){
             flats[i] = new Flat();
+            size++;
         }
     }
 
@@ -101,5 +102,14 @@ public class DwellingFloor implements Floor {
             }
         }
         return flats[number];
+    }
+
+    public String toString(){
+        StringBuilder output = new StringBuilder("Dwelling floor: ");
+        output.append(flats.length).append(" spaces\n");
+        for(Space space : flats){
+            output.append(space.toString()).append("\n");
+        }
+        return output.toString();
     }
 }

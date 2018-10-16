@@ -180,4 +180,13 @@ public class OfficeBuilding implements Building {
 
         return Utils.sortByArea(offices);
     }
+
+    public String toString(){
+        StringBuilder output = new StringBuilder("Office building: ");
+        output.append(size).append(" floors\n");
+        for(ListNode node = head; node != null; node = node.next){
+            output.append(node.value.toString()).append("\n");
+        }
+        return output.toString();
+    }
 }

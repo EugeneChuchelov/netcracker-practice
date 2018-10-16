@@ -40,4 +40,10 @@ public class Flat implements Space {
     public void setRoomsQuantity(int roomsQuantity) {
         this.roomsQuantity = roomsQuantity;
     }
+
+    public String toString(){
+        String output;
+        output = String.format("Flat: %.2f, %s", flatArea, roomsQuantity);
+        return output;
+    }
 }

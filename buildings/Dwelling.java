@@ -3,15 +3,8 @@ package buildings;
 public class Dwelling implements Building {
     private Floor[] floors;
 
-    public Dwelling(int floorsQuantity){
+    public Dwelling(int floorsQuantity, int[] flatsOnFloor){
         floors = new DwellingFloor[floorsQuantity];
-        for(int i =0; i < floorsQuantity; i++){
-            floors[i] = new DwellingFloor();
-        }
-    }
-
-    public Dwelling(int[] flatsOnFloor){
-        floors = new DwellingFloor[flatsOnFloor.length];
         for(int i = 0; i < floors.length; i++){
             floors[i] = new DwellingFloor(flatsOnFloor[i]);
         }
@@ -127,5 +120,13 @@ public class Dwelling implements Building {
         }
 
         return Utils.sortByArea(flats);
+    }
+    public String toString(){
+        StringBuilder output = new StringBuilder("Dwelling building: ");
+        output.append(floors.length).append(" floors\n");
+        for(Floor floor : floors){
+            output.append(floor.toString()).append("\n");
+        }
+        return output.toString();
     }
 }
