@@ -1,6 +1,10 @@
 package buildings;
 
-public class OfficeBuilding implements Building {
+import buildings.Exceptions.FloorIndexOutOfBoundsException;
+
+import java.io.Serializable;
+
+public class OfficeBuilding implements Building, Serializable {
     private class ListNode{
         ListNode next;
         ListNode previous;

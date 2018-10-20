@@ -1,6 +1,11 @@
 package buildings;
 
-public class Office implements Space {
+import buildings.Exceptions.InvalidRoomsCountException;
+import buildings.Exceptions.InvalidSpaceAreaException;
+
+import java.io.Serializable;
+
+public class Office implements Space, Serializable {
     private float officeArea;
     private int roomsQuantity;
     private static final float DEFAULT_AREA = 250;
@@ -40,8 +45,8 @@ public class Office implements Space {
     }
 
     public String toString(){
-        String output;
-        output = String.format("Office: %.2f, %s", officeArea, roomsQuantity);
-        return output;
+        StringBuilder output = new StringBuilder("Office: ");
+        output.append(roomsQuantity).append(", ").append(officeArea).append("; ");
+        return output.toString();
     }
 }

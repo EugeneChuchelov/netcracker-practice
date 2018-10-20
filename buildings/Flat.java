@@ -1,6 +1,11 @@
 package buildings;
 
-public class Flat implements Space {
+import buildings.Exceptions.InvalidRoomsCountException;
+import buildings.Exceptions.InvalidSpaceAreaException;
+
+import java.io.Serializable;
+
+public class Flat implements Space, Serializable {
     private float flatArea;
     private int roomsQuantity;
     private static final float DEFAULT_AREA = 50;
@@ -42,8 +47,8 @@ public class Flat implements Space {
     }
 
     public String toString(){
-        String output;
-        output = String.format("Flat: %.2f, %s", flatArea, roomsQuantity);
-        return output;
+        StringBuilder output = new StringBuilder("Flat: ");
+        output.append(roomsQuantity).append(", ").append(flatArea).append("; ");
+        return output.toString();
     }
 }

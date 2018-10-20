@@ -1,13 +1,12 @@
 package buildings;
 
-public class DwellingFloor implements Floor {
-    private Space[] flats;
-    private static final int DEFAULT_FLATS = 4;
-    private int size;
+import buildings.Exceptions.SpaceIndexOutOfBoundsException;
 
-    public DwellingFloor(){
-        this(DEFAULT_FLATS);
-    }
+import java.io.Serializable;
+
+public class DwellingFloor implements Floor, Serializable {
+    private Space[] flats;
+    private int size;
 
     public DwellingFloor(int flatsQuantity){
         flats = new Space[flatsQuantity];

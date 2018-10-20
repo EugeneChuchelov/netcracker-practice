@@ -1,6 +1,10 @@
 package buildings;
 
-public class OfficeFloor implements Floor {
+import buildings.Exceptions.SpaceIndexOutOfBoundsException;
+
+import java.io.Serializable;
+
+public class OfficeFloor implements Floor, Serializable {
     private class ListNode{
         ListNode next;
         Space value;

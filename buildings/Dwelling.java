@@ -1,16 +1,20 @@
 package buildings;
 
-public class Dwelling implements Building {
+import buildings.Exceptions.FloorIndexOutOfBoundsException;
+
+import java.io.Serializable;
+
+public class Dwelling implements Building, Serializable {
     private Floor[] floors;
 
     public Dwelling(int floorsQuantity, int[] flatsOnFloor){
-        floors = new DwellingFloor[floorsQuantity];
+        floors = new Floor[floorsQuantity];
         for(int i = 0; i < floors.length; i++){
             floors[i] = new DwellingFloor(flatsOnFloor[i]);
         }
     }
 
-    public Dwelling(DwellingFloor[] floors) {
+    public Dwelling(Floor[] floors) {
         this.floors = floors;
     }
 
