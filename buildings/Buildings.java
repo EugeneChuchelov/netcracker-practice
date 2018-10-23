@@ -71,6 +71,19 @@ public class Buildings {
     }
 
     public static void writeBuildingFormat (Building building, Writer out){
+        //todo use Formatter. It appends strigs
+    }
+    
+    public static Building readBuilding(Scanner scanner){        
+        Floor[] floors = new Floor[scanner.nextInt()];
+        for(int i = 0; i < floors.length; i++){
+            floors[i] = new DwellingFloor(scanner.nextInt());
+            for(int s = 0; s < floors[i].getSize(); s++){
+                floors[i].getSpace(s).setRoomsQuantity(scanner.nextInt());
+                floors[i].getSpace(s).setArea(scanner.nextFloat());
+            }
+        }
 
+        return new Dwelling(floors);
     }
 }
