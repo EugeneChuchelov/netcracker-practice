@@ -14,4 +14,5 @@ public interface Building {
     void removeSpace(int number);
     Space getBestSpace();
     Space[] getSpacesSorted();
+    Object clone();
 }

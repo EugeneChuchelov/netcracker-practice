@@ -2,6 +2,7 @@ package buildings;
 
 import java.io.*;
 import java.util.Formatter;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Buildings {
@@ -73,8 +74,7 @@ public class Buildings {
     }
 
     public static void writeBuildingFormat (Building building, Writer out) throws IOException {
-        //todo use Formatter. It appends strings
-        Formatter formatter = new Formatter();
+        Formatter formatter = new Formatter(Locale.US);
         formatter.format("%d ", building.getSize());
         for(Floor floor : building.toArray()){
             formatter.format("%d ", floor.getSize());

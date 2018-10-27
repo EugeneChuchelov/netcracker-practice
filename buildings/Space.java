@@ -5,4 +5,5 @@ public interface Space {
     void setRoomsQuantity(int roomsQuantity);
     float getArea();
     void setArea(float area);
+    Object clone();
 }

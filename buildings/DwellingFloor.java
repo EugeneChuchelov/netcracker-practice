@@ -4,7 +4,7 @@ import buildings.Exceptions.SpaceIndexOutOfBoundsException;
 
 import java.io.Serializable;
 
-public class DwellingFloor implements Floor, Serializable {
+public class DwellingFloor implements Floor, Serializable, Cloneable {
     private Space[] flats;
     private int size;
 
@@ -17,8 +17,9 @@ public class DwellingFloor implements Floor, Serializable {
     }
 
     public DwellingFloor(Space[] flats) {
-        flats = new Flat[flats.length];
+        this.flats = new Space[flats.length];
         System.arraycopy(flats, 0, this.flats, 0, flats.length);
+        size = flats.length;
     }
 
     public int getSize(){
@@ -103,12 +104,58 @@ public class DwellingFloor implements Floor, Serializable {
         return flats[number];
     }
 
+    @Override
     public String toString(){
-        StringBuilder output = new StringBuilder("Dwelling floor: ");
-        output.append(flats.length).append(" spaces\n");
+        StringBuilder output = new StringBuilder("Dwelling floor (");
+        output.append(flats.length);
         for(Space space : flats){
-            output.append(space.toString()).append("\n");
+            output.append(", ").append(space.toString());
         }
+        output.append(")");
         return output.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this){
+            return true;
+        }
+        if(obj instanceof DwellingFloor){
+            if(((DwellingFloor) obj).size == this.size){
+                for(int i = 0; i < size; i++){
+                    if(!((DwellingFloor) obj).getSpace(i).equals(this.getSpace(i))){
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = size;
+        for(Space space : flats){
+            hash ^= space.hashCode();
+        }
+        return hash;
+    }
+
+    @Override
+    public Object clone() {
+        Object result;
+        try{
+            result = super.clone();
+            ((DwellingFloor)result).flats = new Space[size];
+            for(int i = 0; i < size; i++){
+                ((DwellingFloor) result).setSpace(i, (Space) getSpace(i).clone());
+            }
+            return result;
+        } catch (CloneNotSupportedException e) {
+            System.err.println("Dwelling floor can't be cloned");
+
+        }
+        return null;
     }
 }

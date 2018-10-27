@@ -4,7 +4,7 @@ import buildings.Exceptions.FloorIndexOutOfBoundsException;
 
 import java.io.Serializable;
 
-public class OfficeBuilding implements Building, Serializable {
+public class OfficeBuilding implements Building, Serializable, Cloneable {
     private class ListNode{
         ListNode next;
         ListNode previous;
@@ -165,7 +165,7 @@ public class OfficeBuilding implements Building, Serializable {
     }
 
     public Space getBestSpace(){
-        Space best = new Office(0,0);
+        Space best = new Office(0, 0);
         for(ListNode node = head; node != null; node = node.next){
             if(node.value.getBestSpace().getArea() > best.getArea()){
                 best = node.value.getBestSpace();
@@ -185,12 +185,59 @@ public class OfficeBuilding implements Building, Serializable {
         return Utils.sortByArea(offices);
     }
 
+    @Override
     public String toString(){
-        StringBuilder output = new StringBuilder("Office building: ");
-        output.append(size).append(" floors\n");
+        StringBuilder output = new StringBuilder("Office building (");
+        output.append(size);
         for(ListNode node = head; node != null; node = node.next){
-            output.append(node.value.toString()).append("\n");
+            output.append(", ").append(node.value.toString());
         }
+        output.append(")");
         return output.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this){
+            return true;
+        }
+        if(obj instanceof OfficeBuilding){
+            if(((OfficeBuilding) obj).size == this.size){
+                for(int i = 0; i < size; i++){
+                    if(!((OfficeBuilding) obj).getFloor(i).equals(this.getFloor(i))){
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = size;
+        for(ListNode node = head; node != null; node = node.next){
+            hash ^= node.value.hashCode();
+        }
+        return hash;
+    }
+
+    @Override
+    public Object clone() {
+        Object result;
+        try{
+            result = super.clone();
+            ((OfficeBuilding)result).head = null;
+            ((OfficeBuilding)result).size = 0;
+            for(int i = 0; i < size; i++){
+                ((OfficeBuilding) result).addNode(i, new ListNode((Floor) getFloor(i).clone()));
+            }
+            return result;
+        } catch (CloneNotSupportedException e) {
+            System.err.println("Office floor can't be cloned");
+
+        }
+        return null;
     }
 }

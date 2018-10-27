@@ -4,7 +4,7 @@ import buildings.Exceptions.SpaceIndexOutOfBoundsException;
 
 import java.io.Serializable;
 
-public class OfficeFloor implements Floor, Serializable {
+public class OfficeFloor implements Floor, Serializable, Cloneable {
     private class ListNode{
         ListNode next;
         Space value;
@@ -130,12 +130,59 @@ public class OfficeFloor implements Floor, Serializable {
         return bestOffice;
     }
 
+    @Override
     public String toString(){
-        StringBuilder output = new StringBuilder("Office floor: ");
-        output.append(size).append(" spaces\n");
+        StringBuilder output = new StringBuilder("Office floor (");
+        output.append(size);
         for(ListNode node = head; node != null; node = node.next){
-            output.append(node.value.toString()).append("\n");
+            output.append(", ").append(node.value.toString());
         }
+        output.append(")");
         return output.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this){
+            return true;
+        }
+        if(obj instanceof OfficeFloor){
+            if(((OfficeFloor) obj).size == this.size){
+                for(int i = 0; i < size; i++){
+                    if(!((OfficeFloor) obj).getSpace(i).equals(this.getSpace(i))){
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = size;
+        for(ListNode node = head; node != null; node = node.next){
+            hash ^= node.value.hashCode();
+        }
+        return hash;
+    }
+
+    @Override
+    public Object clone() {
+        Object result;
+        try{
+            result = super.clone();
+            ((OfficeFloor)result).head = null;
+            ((OfficeFloor)result).size = 0;
+            for(int i = 0; i < size; i++){
+                ((OfficeFloor) result).add(i, (Space) getSpace(i).clone());
+            }
+            return result;
+        } catch (CloneNotSupportedException e) {
+            System.err.println("Office floor can't be cloned");
+
+        }
+        return null;
     }
 }

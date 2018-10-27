@@ -4,22 +4,24 @@ import buildings.Exceptions.InvalidRoomsCountException;
 import buildings.Exceptions.InvalidSpaceAreaException;
 
 import java.io.Serializable;
+import java.util.Formatter;
+import java.util.Locale;
 
-public class Flat implements Space, Serializable {
+public class Flat implements Space, Serializable, Cloneable {
     private float flatArea;
     private int roomsQuantity;
     private static final float DEFAULT_AREA = 50;
     private static final int DEFAULT_ROOMS = 2;
 
     public Flat(){
-        this(DEFAULT_AREA, DEFAULT_ROOMS);
+        this(DEFAULT_ROOMS, DEFAULT_AREA);
     }
 
     public Flat(float area){
-        this(area, DEFAULT_ROOMS);
+        this(DEFAULT_ROOMS, area);
     }
 
-    public Flat(float area, int rooms){
+    public Flat(int rooms, float area){
         if(area <= 0){
             throw new InvalidSpaceAreaException("Area must be > 0");
         }
@@ -46,9 +48,36 @@ public class Flat implements Space, Serializable {
         this.roomsQuantity = roomsQuantity;
     }
 
+    @Override
     public String toString(){
-        StringBuilder output = new StringBuilder("Flat: ");
-        output.append(roomsQuantity).append(", ").append(flatArea).append("; ");
-        return output.toString();
+        Formatter form = new Formatter(Locale.US);
+        form.format("Flat (%d, %.1f)", roomsQuantity, flatArea);
+        return form.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this){
+            return true;
+        }
+        if(obj instanceof Flat){
+            return ((Flat) obj).roomsQuantity == this.roomsQuantity && ((Flat) obj).flatArea == this.flatArea;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        String sd = String.valueOf(Float.floatToIntBits(flatArea));
+        return roomsQuantity ^ Integer.parseInt(sd.substring(0,4)) ^ Integer.parseInt(sd.substring(5,8));
+    }
+
+    @Override
+    public Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
     }
 }

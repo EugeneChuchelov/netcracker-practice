@@ -4,20 +4,22 @@ import buildings.Exceptions.InvalidRoomsCountException;
 import buildings.Exceptions.InvalidSpaceAreaException;
 
 import java.io.Serializable;
+import java.util.Formatter;
+import java.util.Locale;
 
-public class Office implements Space, Serializable {
+public class Office implements Space, Serializable, Cloneable {
     private float officeArea;
     private int roomsQuantity;
     private static final float DEFAULT_AREA = 250;
     private static final int DEFAULT_ROOMS = 1;
 
     public Office(){
-        this(DEFAULT_AREA, DEFAULT_ROOMS);
+        this(DEFAULT_ROOMS, DEFAULT_AREA);
     }
     public Office(float area){
-        this(area, DEFAULT_ROOMS);
+        this(DEFAULT_ROOMS, area);
     }
-    public Office(float area, int rooms){
+    public Office(int rooms, float area){
         if(area <= 0){
             throw new InvalidSpaceAreaException("Area must be > 0");
         }
@@ -44,9 +46,36 @@ public class Office implements Space, Serializable {
         this.roomsQuantity = roomsQuantity;
     }
 
+    @Override
     public String toString(){
-        StringBuilder output = new StringBuilder("Office: ");
-        output.append(roomsQuantity).append(", ").append(officeArea).append("; ");
-        return output.toString();
+        Formatter form = new Formatter(Locale.US);
+        form.format("Office (%d, %.1f)", roomsQuantity, officeArea);
+        return form.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == this){
+            return true;
+        }
+        if(obj instanceof Office){
+            return ((Office) obj).roomsQuantity == this.roomsQuantity && ((Office) obj).officeArea == this.officeArea;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        String sd = String.valueOf(Float.floatToIntBits(officeArea));
+        return roomsQuantity ^ Integer.parseInt(sd.substring(0,4)) ^ Integer.parseInt(sd.substring(5,8));
+    }
+
+    @Override
+    public Object clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
     }
 }

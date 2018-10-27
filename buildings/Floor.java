@@ -10,4 +10,5 @@ public interface Floor {
     void add(int number, Space space);
     void remove(int number);
     Space getBestSpace();
+    Object clone();
 }
