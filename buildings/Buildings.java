@@ -1,6 +1,8 @@
 package buildings;
 
 import java.io.*;
+import java.util.Formatter;
+import java.util.Scanner;
 
 public class Buildings {
     public static void outputBuilding (Building building, OutputStream out) throws IOException {
@@ -70,11 +72,20 @@ public class Buildings {
         return (Building) stream.readObject();
     }
 
-    public static void writeBuildingFormat (Building building, Writer out){
-        //todo use Formatter. It appends strigs
+    public static void writeBuildingFormat (Building building, Writer out) throws IOException {
+        //todo use Formatter. It appends strings
+        Formatter formatter = new Formatter();
+        formatter.format("%d ", building.getSize());
+        for(Floor floor : building.toArray()){
+            formatter.format("%d ", floor.getSize());
+            for(Space space : floor.toArray()){
+                formatter.format("%d %4.2f ", space.getRoomsQuantity(), space.getArea());
+            }
+        }
+        out.write(formatter.toString());
     }
     
-    public static Building readBuilding(Scanner scanner){        
+    public static Building readBuilding(Scanner scanner){
         Floor[] floors = new Floor[scanner.nextInt()];
         for(int i = 0; i < floors.length; i++){
             floors[i] = new DwellingFloor(scanner.nextInt());

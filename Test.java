@@ -51,29 +51,30 @@ public class Test {
         System.out.println(db.toString());
         System.out.println("------------");
 
-        try(OutputStream out  = new FileOutputStream("test.bin");
+        /*try(OutputStream out  = new FileOutputStream("test.bin");
             InputStream in = new FileInputStream("test.bin")){
-            Buildings.serializeBuilding(db, out);
-            Building ff = Buildings.deserializeBuilding(in);
-            System.out.println(ff.toString());
+            //Buildings.serializeBuilding(db, out);
+            //Building ff = Buildings.deserializeBuilding(in);
+            //System.out.println(ff.toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }
+        }*/
 
-        /*try(OutputStream out  = new FileOutputStream("test.bin");
+        try(OutputStream out  = new FileOutputStream("test.bin");
             InputStream in = new FileInputStream("test.bin");
-           // PrintWriter print = new PrintWriter(new BufferedWriter(new FileWriter("out.txt")));
+            PrintWriter print = new PrintWriter(new BufferedWriter(new FileWriter("out.txt")));
             BufferedReader read = new BufferedReader(new FileReader("out.txt"))){
             //Buildings.writeBuilding(db, print);
-            Building ff = Buildings.readBuilding(read);
+            Buildings.writeBuildingFormat(db, print);
+            //Building ff = Buildings.readBuilding(read);
             //Buildings.outputBuilding(db, out);
             //db = Buildings.inputBuilding(in);
             //Building ff = Buildings.inputBuilding(in);
-            System.out.println(ff.toString());
+            //System.out.println(ff.toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -82,7 +83,7 @@ public class Test {
 
         //System.out.println(db.toString());
 
-        Floor ef0 = new DwellingFloor(1);
+        /*Floor ef0 = new DwellingFloor(1);
         Space as = new Flat(250,1);
         ef0.setSpace(0,as);
         Floor ef1 = new OfficeFloor(1);
