@@ -1,6 +1,10 @@
-package buildings;
+package buildings.dwelling;
 
-import buildings.Exceptions.FloorIndexOutOfBoundsException;
+import buildings.exceptions.FloorIndexOutOfBoundsException;
+import buildings.interfaces.Building;
+import buildings.interfaces.Floor;
+import buildings.interfaces.Space;
+import buildings.utils.Utils;
 
 import java.io.Serializable;
 
@@ -25,7 +29,7 @@ public class Dwelling implements Building, Serializable, Cloneable {
 
     public int getSpacesQuantity(){
         int flatsQuantity = 0;
-        for(Floor floor : floors){
+        for(Floor floor : this){
             flatsQuantity += floor.getSize();
         }
         return flatsQuantity;
@@ -33,7 +37,7 @@ public class Dwelling implements Building, Serializable, Cloneable {
 
     public float getAreaTotal(){
         float totalArea = 0;
-        for(Floor floor : floors){
+        for(Floor floor : this){
             totalArea += floor.getAreaTotal();
         }
         return totalArea;
@@ -41,13 +45,17 @@ public class Dwelling implements Building, Serializable, Cloneable {
 
     public int getRoomsTotal(){
         int totalRoomsQuantity = 0;
-        for(Floor floor : floors){
+        for(Floor floor : this){
             totalRoomsQuantity += floor.getRoomsTotal();
         }
         return totalRoomsQuantity;
     }
 
     public Floor[] toArray() {
+        return floors;
+    }
+
+    public Floor[] getFloors(){
         return floors;
     }
 
@@ -78,7 +86,7 @@ public class Dwelling implements Building, Serializable, Cloneable {
     private int[] getNumberOnFloor(int number){
         int[] floorAndNumber = new int[2];
         int i =0;
-        for (Floor floor : floors) {
+        for (Floor floor : this) {
             if (number < floor.getSize()) {
                 floorAndNumber[0] = i;
                 floorAndNumber[1] = number;
@@ -119,7 +127,7 @@ public class Dwelling implements Building, Serializable, Cloneable {
     public Space[] getSpacesSorted(){
         Space[] flats = new Space[getSpacesQuantity()];
         int z = 0;
-        for(Floor floor : floors){
+        for(Floor floor : this){
             System.arraycopy(floor.toArray(), 0, flats, z, floor.getSize());
             z = floor.getSize();
         }
@@ -131,7 +139,7 @@ public class Dwelling implements Building, Serializable, Cloneable {
     public String toString(){
         StringBuilder output = new StringBuilder("Dwelling building (");
         output.append(floors.length);
-        for(Floor floor : floors){
+        for(Floor floor : this){
             output.append(", ").append(floor.toString());
         }
         output.append(")");
@@ -159,7 +167,7 @@ public class Dwelling implements Building, Serializable, Cloneable {
     @Override
     public int hashCode() {
         int hash = floors.length;
-        for(Floor floor : floors){
+        for(Floor floor : this){
             hash ^= floor.hashCode();
         }
         return hash;
@@ -180,5 +188,28 @@ public class Dwelling implements Building, Serializable, Cloneable {
 
         }
         return null;
+    }
+
+    @Override
+    public Iterator iterator() {
+        return new Iterator();
+    }
+
+    class Iterator implements java.util.Iterator<Floor>{
+        int cursor;
+
+        public Iterator() {
+            this.cursor = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return cursor < getSize();
+        }
+
+        @Override
+        public Floor next() {
+            return getFloor(cursor++);
+        }
     }
 }

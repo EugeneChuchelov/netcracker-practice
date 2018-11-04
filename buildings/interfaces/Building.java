@@ -1,6 +1,6 @@
-package buildings;
+package buildings.interfaces;
 
-public interface Building {
+public interface Building extends Iterable<Floor>{
     int getSize();
     int getSpacesQuantity();
     float getAreaTotal();
@@ -15,4 +15,5 @@ public interface Building {
     Space getBestSpace();
     Space[] getSpacesSorted();
     Object clone();
+    java.util.Iterator<Floor> iterator();
 }

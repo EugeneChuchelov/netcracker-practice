@@ -1,6 +1,10 @@
-package buildings;
+package buildings.office;
 
-import buildings.Exceptions.FloorIndexOutOfBoundsException;
+import buildings.interfaces.Building;
+import buildings.exceptions.FloorIndexOutOfBoundsException;
+import buildings.interfaces.Floor;
+import buildings.interfaces.Space;
+import buildings.utils.Utils;
 
 import java.io.Serializable;
 
@@ -48,8 +52,6 @@ public class OfficeBuilding implements Building, Serializable, Cloneable {
         } else if(index == size){
             getNode(index - 1).next = node;
             node.previous = getNode(index - 1);
-            //tail.next = newNode;
-            //tail = newNode;
         } else {
             getNode(index - 1).next = node;
             node.previous = getNode(index - 1);
@@ -77,24 +79,24 @@ public class OfficeBuilding implements Building, Serializable, Cloneable {
 
     public int getSpacesQuantity(){
         int quantity = 0;
-        for(ListNode node = head; node != null; node = node.next){
-            quantity += node.value.getSize();
+        for(Floor floor : this){
+            quantity += floor.getSize();
         }
         return quantity;
     }
 
     public float getAreaTotal(){
         float area = 0;
-        for(ListNode node = head; node != null; node = node.next){
-            area += node.value.getAreaTotal();
+        for(Floor floor : this){
+            area += floor.getAreaTotal();
         }
         return area;
     }
 
     public int getRoomsTotal(){
         int rooms = 0;
-        for(ListNode node = head; node != null; node = node.next){
-            rooms += node.value.getRoomsTotal();
+        for(Floor floor : this){
+            rooms += floor.getRoomsTotal();
         }
         return rooms;
     }
@@ -102,8 +104,8 @@ public class OfficeBuilding implements Building, Serializable, Cloneable {
     public Floor[] toArray(){
         Floor[] floors = new Floor[size];
         int i = 0;
-        for(ListNode node = head; node != null; node = node.next){
-            floors[i] = node.value;
+        for(Floor floor : this) {
+            floors[i] = floor;
             i++;
         }
         return floors;
@@ -151,13 +153,13 @@ public class OfficeBuilding implements Building, Serializable, Cloneable {
     private int[] getNumberOnFloor(int number){
         int[] floorAndNumber = new int[2];
         int i = 0;
-        for(ListNode node = head; node != null; node = node.next){
-            if(number <= node.value.getSize()){
+        for(Floor floor : this) {
+            if(number <= floor.getSize()){
                 floorAndNumber[0] = i;
                 floorAndNumber[1] = number;
                 break;
             } else {
-                number -= node.value.getSize();
+                number -= floor.getSize();
                 i++;
             }
         }
@@ -166,9 +168,9 @@ public class OfficeBuilding implements Building, Serializable, Cloneable {
 
     public Space getBestSpace(){
         Space best = new Office(0, 0);
-        for(ListNode node = head; node != null; node = node.next){
-            if(node.value.getBestSpace().getArea() > best.getArea()){
-                best = node.value.getBestSpace();
+        for(Floor floor : this) {
+            if(floor.getBestSpace().getArea() > best.getArea()){
+                best = floor.getBestSpace();
             }
         }
         return best;
@@ -177,9 +179,9 @@ public class OfficeBuilding implements Building, Serializable, Cloneable {
     public Space[] getSpacesSorted(){
         Space[] offices = new Space[getSpacesQuantity()];
         int z = 0;
-        for(ListNode node = head; node != null; node = node.next){
-            System.arraycopy(node.value.toArray(), 0, offices, z, node.value.getSize());
-            z = node.value.getSize();
+        for(Floor floor : this) {
+            System.arraycopy(floor.toArray(), 0, offices, z, floor.getSize());
+            z = floor.getSize();
         }
 
         return Utils.sortByArea(offices);
@@ -189,8 +191,8 @@ public class OfficeBuilding implements Building, Serializable, Cloneable {
     public String toString(){
         StringBuilder output = new StringBuilder("Office building (");
         output.append(size);
-        for(ListNode node = head; node != null; node = node.next){
-            output.append(", ").append(node.value.toString());
+        for(Floor floor : this) {
+            output.append(", ").append(floor.toString());
         }
         output.append(")");
         return output.toString();
@@ -217,8 +219,8 @@ public class OfficeBuilding implements Building, Serializable, Cloneable {
     @Override
     public int hashCode() {
         int hash = size;
-        for(ListNode node = head; node != null; node = node.next){
-            hash ^= node.value.hashCode();
+        for(Floor floor : this) {
+            hash ^= floor.hashCode();
         }
         return hash;
     }
@@ -239,5 +241,30 @@ public class OfficeBuilding implements Building, Serializable, Cloneable {
 
         }
         return null;
+    }
+
+    @Override
+    public Iterator iterator() {
+        return new Iterator();
+    }
+
+    class Iterator implements java.util.Iterator<Floor>{
+        ListNode cursor;
+
+        public Iterator() {
+            this.cursor = head;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return cursor != null;
+        }
+
+        @Override
+        public Floor next() {
+            Floor next = cursor.value;
+            cursor = cursor.next;
+            return next;
+        }
     }
 }

@@ -1,7 +1,9 @@
-package buildings;
+package buildings.utils;
+
+import buildings.interfaces.Space;
 
 public class Utils {
-    static Space[] sortByArea(Space[] spaces){
+    public static Space[] sortByArea(Space[] spaces){
         Space swapBuf;
         for(int i = spaces.length - 1; i > 0; i--)
         {

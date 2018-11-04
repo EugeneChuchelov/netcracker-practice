@@ -1,6 +1,8 @@
-package buildings;
+package buildings.dwelling;
 
-import buildings.Exceptions.SpaceIndexOutOfBoundsException;
+import buildings.exceptions.SpaceIndexOutOfBoundsException;
+import buildings.interfaces.Floor;
+import buildings.interfaces.Space;
 
 import java.io.Serializable;
 
@@ -36,13 +38,17 @@ public class DwellingFloor implements Floor, Serializable, Cloneable {
 
     public int getRoomsTotal(){
         int totalRoomsQuantity = 0;
-        for(Space flat : flats){
-            totalRoomsQuantity += flat.getRoomsQuantity();
+        for(Space space : this){
+            totalRoomsQuantity += space.getRoomsQuantity();
         }
         return totalRoomsQuantity;
     }
 
     public Space[] toArray() {
+        return flats;
+    }
+
+    public Space[] getSpaces(){
         return flats;
     }
 
@@ -108,7 +114,7 @@ public class DwellingFloor implements Floor, Serializable, Cloneable {
     public String toString(){
         StringBuilder output = new StringBuilder("Dwelling floor (");
         output.append(flats.length);
-        for(Space space : flats){
+        for(Space space : this){
             output.append(", ").append(space.toString());
         }
         output.append(")");
@@ -136,7 +142,7 @@ public class DwellingFloor implements Floor, Serializable, Cloneable {
     @Override
     public int hashCode() {
         int hash = size;
-        for(Space space : flats){
+        for(Space space : this){
             hash ^= space.hashCode();
         }
         return hash;
@@ -154,8 +160,41 @@ public class DwellingFloor implements Floor, Serializable, Cloneable {
             return result;
         } catch (CloneNotSupportedException e) {
             System.err.println("Dwelling floor can't be cloned");
-
         }
         return null;
+    }
+
+    @Override
+    public Iterator iterator() {
+        return new Iterator();
+    }
+
+    class Iterator implements java.util.Iterator<Space>{
+        int cursor;
+
+        public Iterator() {
+            this.cursor = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return cursor < getSize();
+        }
+
+        @Override
+        public Space next() {
+            return getSpace(cursor++);
+        }
+    }
+
+    @Override
+    public int compareTo(Floor o) {
+        if(getSize() > o.getSize()){
+            return 1;
+        } else if(getSize() < o.getSize()){
+            return -1;
+        } else{
+            return 0;
+        }
     }
 }

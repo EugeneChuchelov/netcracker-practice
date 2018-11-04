@@ -1,7 +1,8 @@
-package buildings;
+package buildings.dwelling;
 
-import buildings.Exceptions.InvalidRoomsCountException;
-import buildings.Exceptions.InvalidSpaceAreaException;
+import buildings.exceptions.InvalidRoomsCountException;
+import buildings.exceptions.InvalidSpaceAreaException;
+import buildings.interfaces.Space;
 
 import java.io.Serializable;
 import java.util.Formatter;
@@ -79,5 +80,14 @@ public class Flat implements Space, Serializable, Cloneable {
         } catch (CloneNotSupportedException e) {
             return null;
         }
+    }
+
+    @Override
+    public int compareTo(Space o) {
+        if(getArea() > o.getArea()){
+            return 1;
+        } else if(getArea() < o.getArea()){
+            return -1;
+        } else return 0;
     }
 }

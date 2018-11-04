@@ -1,7 +1,10 @@
-package buildings;
+package buildings.utils;
 
-import buildings.Exceptions.InexchangeableFloorsException;
-import buildings.Exceptions.InexchangeableSpacesException;
+import buildings.interfaces.Building;
+import buildings.interfaces.Floor;
+import buildings.interfaces.Space;
+import buildings.exceptions.InexchangeableFloorsException;
+import buildings.exceptions.InexchangeableSpacesException;
 
 public class PlacementExchanger {
     public static boolean isSpacesExchangePossible(Space space1, Space space2){
