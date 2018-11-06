@@ -10,9 +10,9 @@ public class DwellingFloor implements Floor, Serializable, Cloneable {
     private Space[] flats;
     private int size;
 
-    public DwellingFloor(int flatsQuantity){
+    public DwellingFloor(int flatsQuantity) {
         flats = new Space[flatsQuantity];
-        for(int i = 0; i < flatsQuantity; i++){
+        for (int i = 0; i < flatsQuantity; i++) {
             flats[i] = new Flat();
             size++;
         }
@@ -24,21 +24,21 @@ public class DwellingFloor implements Floor, Serializable, Cloneable {
         size = flats.length;
     }
 
-    public int getSize(){
+    public int getSize() {
         return size;
     }
 
-    public float getAreaTotal(){
+    public float getAreaTotal() {
         float totalArea = 0;
-        for(Space flat : flats){
+        for (Space flat : flats) {
             totalArea += flat.getArea();
         }
         return totalArea;
     }
 
-    public int getRoomsTotal(){
+    public int getRoomsTotal() {
         int totalRoomsQuantity = 0;
-        for(Space space : this){
+        for (Space space : this) {
             totalRoomsQuantity += space.getRoomsQuantity();
         }
         return totalRoomsQuantity;
@@ -48,33 +48,32 @@ public class DwellingFloor implements Floor, Serializable, Cloneable {
         return flats;
     }
 
-    public Space[] getSpaces(){
+    public Space[] getSpaces() {
         return flats;
     }
 
-    public Space getSpace(int number){
+    public Space getSpace(int number) {
         testNumber(number);
         return flats[number];
     }
 
-    public void setSpace(int number, Space flat){
+    public void setSpace(int number, Space flat) {
         testNumber(number);
         flats[number] = flat;
     }
 
-    public void add(int number, Space flat){
+    public void add(int number, Space flat) {
         testNumber(number);
         Flat[] itemsToShift = new Flat[size - number];
         System.arraycopy(flats, number, itemsToShift, 0, size - number);
         size = number + 1;
         flats[number] = flat;
-        for(Flat itemToAdd : itemsToShift){
+        for (Flat itemToAdd : itemsToShift) {
             add(itemToAdd);
         }
     }
 
-    private void add(Space flat)
-    {
+    private void add(Space flat) {
         Space[] newFlats = new Space[size + 1];
         System.arraycopy(flats, 0, newFlats, 0, size);
         newFlats[size] = flat;
@@ -85,25 +84,25 @@ public class DwellingFloor implements Floor, Serializable, Cloneable {
     public void remove(int number) {
         testNumber(number);
         Space[] newFlats = new Space[size - 1];
-        System.arraycopy(flats,0,newFlats,0, number);
+        System.arraycopy(flats, 0, newFlats, 0, number);
         System.arraycopy(flats, number + 1, newFlats, number, size - number - 1);
         flats = newFlats;
         size--;
     }
 
-    private void testNumber(int number){
-        if(number >= size){
+    private void testNumber(int number) {
+        if (number >= size) {
             throw new SpaceIndexOutOfBoundsException("Floor don't have enough flats");
         }
-        if(number < 0){
+        if (number < 0) {
             throw new SpaceIndexOutOfBoundsException("Flats numbers starts on 0");
         }
     }
 
-    public Space getBestSpace(){
+    public Space getBestSpace() {
         int number = 0;
-        for (int i = 0; i < size; i++){
-            if(flats[i].getArea() > flats[number].getArea()){
+        for (int i = 0; i < size; i++) {
+            if (flats[i].getArea() > flats[number].getArea()) {
                 number = i;
             }
         }
@@ -111,10 +110,10 @@ public class DwellingFloor implements Floor, Serializable, Cloneable {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder output = new StringBuilder("Dwelling floor (");
         output.append(flats.length);
-        for(Space space : this){
+        for (Space space : this) {
             output.append(", ").append(space.toString());
         }
         output.append(")");
@@ -123,13 +122,13 @@ public class DwellingFloor implements Floor, Serializable, Cloneable {
 
     @Override
     public boolean equals(Object obj) {
-        if(obj == this){
+        if (obj == this) {
             return true;
         }
-        if(obj instanceof DwellingFloor){
-            if(((DwellingFloor) obj).size == this.size){
-                for(int i = 0; i < size; i++){
-                    if(!((DwellingFloor) obj).getSpace(i).equals(this.getSpace(i))){
+        if (obj instanceof DwellingFloor) {
+            if (((DwellingFloor) obj).size == this.size) {
+                for (int i = 0; i < size; i++) {
+                    if (!((DwellingFloor) obj).getSpace(i).equals(this.getSpace(i))) {
                         return false;
                     }
                 }
@@ -142,7 +141,7 @@ public class DwellingFloor implements Floor, Serializable, Cloneable {
     @Override
     public int hashCode() {
         int hash = size;
-        for(Space space : this){
+        for (Space space : this) {
             hash ^= space.hashCode();
         }
         return hash;
@@ -151,10 +150,10 @@ public class DwellingFloor implements Floor, Serializable, Cloneable {
     @Override
     public Object clone() {
         Object result;
-        try{
+        try {
             result = super.clone();
-            ((DwellingFloor)result).flats = new Space[size];
-            for(int i = 0; i < size; i++){
+            ((DwellingFloor) result).flats = new Space[size];
+            for (int i = 0; i < size; i++) {
                 ((DwellingFloor) result).setSpace(i, (Space) getSpace(i).clone());
             }
             return result;
@@ -165,11 +164,22 @@ public class DwellingFloor implements Floor, Serializable, Cloneable {
     }
 
     @Override
-    public Iterator iterator() {
+    public java.util.Iterator<Space> iterator() {
         return new Iterator();
     }
 
-    class Iterator implements java.util.Iterator<Space>{
+    @Override
+    public int compareTo(Floor o) {
+        if (getSize() > o.getSize()) {
+            return 1;
+        } else if (getSize() < o.getSize()) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
+    class Iterator implements java.util.Iterator<Space> {
         int cursor;
 
         public Iterator() {
@@ -185,16 +195,10 @@ public class DwellingFloor implements Floor, Serializable, Cloneable {
         public Space next() {
             return getSpace(cursor++);
         }
-    }
 
-    @Override
-    public int compareTo(Floor o) {
-        if(getSize() > o.getSize()){
-            return 1;
-        } else if(getSize() < o.getSize()){
-            return -1;
-        } else{
-            return 0;
+        @Override
+        public void remove() {
+
         }
     }
 }
