@@ -1,5 +1,6 @@
 package buildings.utils;
 
+import buildings.SynchronizedFloor;
 import buildings.dwelling.Flat;
 import buildings.factories.DwellingFactory;
 import buildings.interfaces.Building;
@@ -177,5 +178,9 @@ public class Buildings {
             }
         }
         return array;
+    }
+
+    public static Floor synchronizedFloor(Floor floor){
+        return new SynchronizedFloor(floor);
     }
 }

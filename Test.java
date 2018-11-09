@@ -6,33 +6,36 @@ import buildings.interfaces.Space;
 import buildings.office.Office;
 import buildings.office.OfficeBuilding;
 import buildings.office.OfficeFloor;
-import buildings.utils.Buildings;
-import buildings.utils.FloorAreaDescComparator;
-import buildings.utils.SpaceRoomsDescComparator;
+import buildings.threads.QueueSemaphore;
+import buildings.threads.SequentialCleaner;
+import buildings.threads.SequentialRepairer;
 
 public class Test {
     public static void main(String[] args) {
         Space f11 = new Flat(4, 40);
-        Space o11 = new Office(4,40);
-        Space f00 = new Flat(1,10);
-        Space f01 = new Flat(2,20);
-        Space f10 = new Flat(3,30);
+        Space o11 = new Office(4, 40);
+        Space f00 = new Flat(1, 10);
+        Space f01 = new Flat(2, 20);
+        Space f10 = new Flat(3, 30);
         Space[] hsdf = {f11, o11, f00, f01, f10};
         Floor f = new OfficeFloor(hsdf);
         Floor asd = new DwellingFloor(hsdf);
         asd.add(3, f11);
         Floor[] hnh = {f, asd};
-        for(Space space : hsdf){
-            System.out.println(space.toString());
-        }
-
-        Space[] wes = Buildings.sort(hsdf);
-        System.out.println();
-        for(Space space : wes){
-            System.out.println(space.toString());
-        }
-
         Building sdag = new OfficeBuilding(hnh);
+
+        /*Repairer repairer = new Repairer(asd);
+        Cleaner cleaner = new Cleaner(asd);
+        repairer.start();
+        cleaner.start();*/
+        QueueSemaphore semaphore = new QueueSemaphore();
+        Thread repairer = new Thread(new SequentialRepairer(asd, semaphore));
+        Thread cleaner = new Thread(new SequentialCleaner(asd, semaphore));
+        //Runnable repairer = new SequentialRepairer(asd);
+        //Runnable cleaner = new SequentialCleaner(asd);
+
+        repairer.start();
+        cleaner.start();
         //Building qewt = (OfficeBuilding) sdag.clone();
         //System.out.println("ewq");
         /*Space o00 = new Office(10,1);
