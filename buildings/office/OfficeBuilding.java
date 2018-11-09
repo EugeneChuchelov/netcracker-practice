@@ -244,7 +244,7 @@ public class OfficeBuilding implements Building, Serializable, Cloneable {
     }
 
     @Override
-    public Iterator iterator() {
+    public java.util.Iterator<Floor> iterator() {
         return new Iterator();
     }
 

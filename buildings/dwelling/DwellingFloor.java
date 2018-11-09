@@ -165,7 +165,7 @@ public class DwellingFloor implements Floor, Serializable, Cloneable {
     }
 
     @Override
-    public Iterator iterator() {
+    public java.util.Iterator<Space> iterator() {
         return new Iterator();
     }
 
