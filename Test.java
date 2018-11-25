@@ -1,3 +1,4 @@
+import buildings.dwelling.Dwelling;
 import buildings.dwelling.DwellingFloor;
 import buildings.dwelling.Flat;
 import buildings.interfaces.Building;
@@ -6,49 +7,36 @@ import buildings.interfaces.Space;
 import buildings.office.Office;
 import buildings.office.OfficeBuilding;
 import buildings.office.OfficeFloor;
-import buildings.threads.QueueSemaphore;
-import buildings.threads.SequentialCleaner;
-import buildings.threads.SequentialRepairer;
+import buildings.utils.Buildings;
+
+import java.io.*;
+import java.util.Scanner;
 
 public class Test {
-    public static void main(String[] args) {
-        Space f11 = new Flat(4, 40);
+    public static void main(String[] args) throws IOException {
+        Space sdaq = new Flat(4, 40);
+        Space jgh = new Office(4, 40);
+        Space tyu = new Flat(1, 10);
+        Space nbmg = new Flat(2, 20);
+        Space ytn = new Flat(3, 30);
+        Space[] hsdf = {sdaq, jgh, tyu, nbmg, ytn};
+        Floor f = new OfficeFloor(hsdf);
+        Floor asd = new DwellingFloor(hsdf);
+        asd.add(3, sdaq);
+        Floor[] hnh = {f, asd};
+        Building sdag = new OfficeBuilding(hnh);
+
+        Space o00 = new Office(1, 10);
+        Space o01 = new Office(2, 20);
+        Space o10 = new Office(3, 30);
         Space o11 = new Office(4, 40);
         Space f00 = new Flat(1, 10);
         Space f01 = new Flat(2, 20);
         Space f10 = new Flat(3, 30);
-        Space[] hsdf = {f11, o11, f00, f01, f10};
-        Floor f = new OfficeFloor(hsdf);
-        Floor asd = new DwellingFloor(hsdf);
-        asd.add(3, f11);
-        Floor[] hnh = {f, asd};
-        Building sdag = new OfficeBuilding(hnh);
+        Space f11 = new Flat(4, 40);
 
-        /*Repairer repairer = new Repairer(asd);
-        Cleaner cleaner = new Cleaner(asd);
-        repairer.start();
-        cleaner.start();*/
-        QueueSemaphore semaphore = new QueueSemaphore();
-        Thread repairer = new Thread(new SequentialRepairer(asd, semaphore));
-        Thread cleaner = new Thread(new SequentialCleaner(asd, semaphore));
-        //Runnable repairer = new SequentialRepairer(asd);
-        //Runnable cleaner = new SequentialCleaner(asd);
-
-        repairer.start();
-        cleaner.start();
-        //Building qewt = (OfficeBuilding) sdag.clone();
-        //System.out.println("ewq");
-        /*Space o00 = new Office(10,1);
-        Space o01 = new Office(20,2);
-        Space o10 = new Office(30,3);
-        Space o11 = new Office(40,4);
-        Space f00 = new Flat(10,1);
-        Space f01 = new Flat(20,2);
-        Space f10 = new Flat(30,3);
-        Space f11 = new Flat(40,4);
-
-        Space od = new Office(50,5);
-        Space fd = new Flat(50,5);
+        Space od = new Office(50, 5);
+        Space fd = new Flat(50, 5);
 
         Floor of0 = new OfficeFloor(2);
         Floor of1 = new OfficeFloor(2);
@@ -68,19 +56,27 @@ public class Test {
 
         ob.addSpace(4, od);
 
-        df0.add(0,f00);
-        df0.add(1,f01);
-        df1.add(0,f10);
-        df1.add(1,f11);
-        db.setFloor(0,df0);
-        db.setFloor(1,df1);
+        df0.add(0, f00);
+        df0.add(1, f01);
+        df1.add(0, f10);
+        df1.add(1, f11);
+        db.setFloor(0, df0);
+        db.setFloor(1, df1);
 
-        db.addSpace(4,fd);
+        db.addSpace(4, fd);
         db.addSpace(0, o11);
         db.addSpace(3, o10);
 
         ob.setFloor(1, df1);
+        PrintWriter wr = new PrintWriter(new FileOutputStream("F:\\Учёба\\NC\\netcracker-practice\\src\\buildings\\net\\client\\1.txt"));
+        Buildings.writeBuilding(ob, wr);
+        wr.close();
 
-        System.out.println(db.toString());*/
+        FileReader reader = new FileReader(new File("qwe.txt"));
+        Scanner scanner = new Scanner(new File("qwe.txt"));
+        Building asdq = Buildings.readBuilding(scanner);
+        System.out.println(asdq.toString());
+
+        //System.out.println(db.toString());
     }
 }

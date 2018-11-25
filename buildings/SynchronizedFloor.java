@@ -13,62 +13,62 @@ public class SynchronizedFloor implements Floor {
     }
 
     @Override
-    public int getSize() {
+    public synchronized int getSize() {
         return floor.getSize();
     }
 
     @Override
-    public float getAreaTotal() {
+    public synchronized float getAreaTotal() {
         return floor.getAreaTotal();
     }
 
     @Override
-    public int getRoomsTotal() {
+    public synchronized int getRoomsTotal() {
         return floor.getRoomsTotal();
     }
 
     @Override
-    public Space[] toArray() {
+    public synchronized Space[] toArray() {
         return floor.toArray();
     }
 
     @Override
-    public Space getSpace(int number) {
+    public synchronized Space getSpace(int number) {
         return floor.getSpace(number);
     }
 
     @Override
-    public void setSpace(int number, Space space) {
+    public synchronized void setSpace(int number, Space space) {
         floor.setSpace(number, space);
     }
 
     @Override
-    public void add(int number, Space space) {
+    public synchronized void add(int number, Space space) {
         floor.add(number, space);
     }
 
     @Override
-    public void remove(int number) {
+    public synchronized void remove(int number) {
         floor.remove(number);
     }
 
     @Override
-    public Space getBestSpace() {
+    public synchronized Space getBestSpace() {
         return floor.getBestSpace();
     }
 
     @Override
-    public Iterator<Space> iterator() {
+    public synchronized Iterator<Space> iterator() {
         return floor.iterator();
     }
 
     @Override
-    public int compareTo(Floor o) {
+    public synchronized int compareTo(Floor o) {
         return floor.compareTo(o);
     }
 
     @Override
-    public Object clone() {
+    public synchronized Object clone() {
         return new SynchronizedFloor((Floor) floor.clone());
     }
 }
