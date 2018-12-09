@@ -8,6 +8,7 @@ import buildings.interfaces.Floor;
 import buildings.interfaces.Space;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
 import java.util.Formatter;
 import java.util.Locale;
@@ -28,26 +29,76 @@ public class Buildings {
         return factory.createSpace(area);
     }
 
+    public static Space createSpace(float area, Class spaceClass) throws IllegalArgumentException {
+        try {
+            return (Space) spaceClass.getConstructor(Float.TYPE).newInstance(area);
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
     public static Space createSpace(int rooms, float area) {
         return factory.createSpace(rooms, area);
+    }
+
+    public static Space createSpace(int rooms, float area, Class spaceClass) throws IllegalArgumentException {
+        try {
+            return (Space) spaceClass.getConstructor(Integer.TYPE, Float.TYPE).newInstance(rooms, area);
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
 
     public static Floor createFloor(int spacesCount) {
         return factory.createFloor(spacesCount);
     }
 
+    public static Floor createFloor(int spacesCount, Class floorClass) throws IllegalArgumentException {
+        try{
+            return (Floor) floorClass.getConstructor(Integer.TYPE).newInstance(spacesCount);
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
     public static Floor createFloor(Space[] spaces) {
         return factory.createFloor(spaces);
+    }
+
+    public static Floor createFloor(Space[] spaces, Class floorClass) throws IllegalArgumentException {
+        try{
+            return (Floor) floorClass.getConstructor(Space[].class).newInstance(new Object[]{spaces});
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
 
     public static Building createBuilding(int floorsCount, int[] spacesCount) {
         return factory.createBuilding(floorsCount, spacesCount);
     }
 
+    public static Building createBuilding(int floorsCount, int[] spacesCount,
+                                          Class buildingClass) throws IllegalArgumentException {
+        try{
+            return (Building) buildingClass.getConstructor(Integer.TYPE, int[].class).newInstance(floorsCount, spacesCount);
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
+    public static Building createBuilding(Floor[] floors, Class buildingClass) throws IllegalArgumentException {
+        try{
+            return (Building) buildingClass.getConstructor(Floor[].class).newInstance(new Object[]{floors});
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
     public static Building createBuilding(Floor[] floors) {
         return factory.createBuilding(floors);
     }
-
+    //,
+    //                                      Class spaceClass, Class floorClass, Class buildingClass
     public static void outputBuilding(Building building, OutputStream out) throws IOException {
         DataOutputStream stream = new DataOutputStream(out);
         stream.writeInt(building.getSize());
@@ -60,17 +111,31 @@ public class Buildings {
         }
     }
 
+    public static Building inputBuilding(InputStream in,
+                                         Class spaceClass, Class floorClass, Class buildingClass) throws IOException {
+        DataInputStream stream = new DataInputStream(in);
+        Floor[] floors = new Floor[stream.readInt()];
+        for (int i = 0; i < floors.length; i++) {
+            Space[] spaces = new Space[stream.readInt()];
+            for (int s = 0; s < spaces.length; s++) {
+                spaces[s] = createSpace(stream.readInt(), stream.readFloat(), spaceClass);
+            }
+            floors[i] = createFloor(spaces, floorClass);
+        }
+        return createBuilding(floors, buildingClass);
+    }
+
     public static Building inputBuilding(InputStream in) throws IOException {
         DataInputStream stream = new DataInputStream(in);
         Floor[] floors = new Floor[stream.readInt()];
         for (int i = 0; i < floors.length; i++) {
             Space[] spaces = new Space[stream.readInt()];
-            for (int s = 0; s < floors[i].getSize(); s++) {
-                spaces[s] = factory.createSpace(stream.readInt(), stream.readFloat());//new Flat(stream.readInt(), stream.readFloat());
+            for (int s = 0; s < spaces.length; s++) {
+                spaces[s] = factory.createSpace(stream.readInt(), stream.readFloat());
             }
-            floors[i] = factory.createFloor(spaces);//new DwellingFloor(spaces);
+            floors[i] = factory.createFloor(spaces);
         }
-        return factory.createBuilding(floors);//new Dwelling(floors);
+        return factory.createBuilding(floors);
     }
 
     public static void writeBuilding(Building building, Writer out) throws IOException {
@@ -95,6 +160,31 @@ public class Buildings {
         }
     }
 
+    public static Building readBuilding(Reader in,
+                                        Class spaceClass, Class floorClass, Class buildingClass) throws IOException {
+        StreamTokenizer tokenizer = new StreamTokenizer(in);
+        float area;
+        int rooms;
+        tokenizer.nextToken();
+        Floor[] floors = new Floor[(int) tokenizer.nval];
+        tokenizer.nextToken();
+        for (int i = 0; i < floors.length; i++) {
+            Space[] spaces = new Space[((int) tokenizer.nval)];
+            tokenizer.nextToken();
+            for (int s = 0; s < spaces.length; s++) {
+                //tokenizer.nextToken();
+                rooms = (int) tokenizer.nval;
+                tokenizer.nextToken();
+                area = (float) tokenizer.nval;
+                tokenizer.nextToken();
+                spaces[s] = createSpace(rooms, area, spaceClass);
+            }
+            floors[i] = createFloor(spaces, floorClass);
+        }
+
+        return createBuilding(floors, buildingClass);
+    }
+
     public static Building readBuilding(Reader in) throws IOException {
         StreamTokenizer tokenizer = new StreamTokenizer(in);
         float area;
@@ -111,12 +201,12 @@ public class Buildings {
                 tokenizer.nextToken();
                 area = (float) tokenizer.nval;
                 tokenizer.nextToken();
-                spaces[s] = factory.createSpace(rooms, area);//new Flat(rooms, area);
+                spaces[s] = factory.createSpace(rooms, area);
             }
-            floors[i] = factory.createFloor(spaces);//new DwellingFloor(spaces);
+            floors[i] = factory.createFloor(spaces);
         }
 
-        return factory.createBuilding(floors);//new Dwelling(floors);
+        return factory.createBuilding(floors);
     }
 
     public static void serializeBuilding(Building building, OutputStream out) throws IOException {
@@ -141,17 +231,31 @@ public class Buildings {
         out.write(formatter.toString());
     }
 
+    public static Building readBuilding(Scanner scanner,
+                                        Class spaceClass, Class floorClass, Class buildingClass) {
+        Floor[] floors = new Floor[scanner.nextInt()];
+        scanner.useLocale(Locale.US);
+        for (int i = 0; i < floors.length; i++) {
+            Space[] spaces = new Space[scanner.nextInt()];
+            for (int s = 0; s < spaces.length; s++) {
+                spaces[s] = createSpace(scanner.nextInt(), scanner.nextFloat(), spaceClass);
+            }
+            floors[i] = createFloor(spaces, floorClass);
+        }
+        return createBuilding(floors, buildingClass);
+    }
+
     public static Building readBuilding(Scanner scanner) {
         Floor[] floors = new Floor[scanner.nextInt()];
         scanner.useLocale(Locale.US);
         for (int i = 0; i < floors.length; i++) {
             Space[] spaces = new Space[scanner.nextInt()];
             for (int s = 0; s < spaces.length; s++) {
-                spaces[s] = factory.createSpace(scanner.nextInt(), scanner.nextFloat());//new Flat(scanner.nextInt(), scanner.nextFloat());
+                spaces[s] = factory.createSpace(scanner.nextInt(), scanner.nextFloat());
             }
-            floors[i] = factory.createFloor(spaces);//new DwellingFloor(spaces);
+            floors[i] = factory.createFloor(spaces);
         }
-        return factory.createBuilding(floors);//new Dwelling(floors);
+        return factory.createBuilding(floors);
     }
 
     public static <T extends Comparable<T>> T[] sort(T[] array) {
@@ -184,6 +288,21 @@ public class Buildings {
 
     public static Floor synchronizedFloor(Floor floor) {
         return new SynchronizedFloor(floor);
+    }
+
+    public static Building parseBuilding(String in,
+                                         Class spaceClass, Class floorClass, Class buildingClass) {
+        String[] tokens = in.split(" ");
+        int current = 0;
+        Floor[] floors = new Floor[Integer.parseInt(tokens[current++])];
+        for (int i = 0; i < floors.length; i++) {
+            Space[] spaces = new Space[Integer.parseInt(tokens[current++])];
+            for (int s = 0; s < spaces.length; s++) {
+                spaces[s] = createSpace(Integer.parseInt(tokens[current++]), Float.parseFloat(tokens[current++]), spaceClass);
+            }
+            floors[i] = createFloor(spaces, floorClass);
+        }
+        return createBuilding(floors, buildingClass);
     }
 
     public static Building parseBuilding(String in) {
