@@ -199,4 +199,31 @@ public class Buildings {
         }
         return factory.createBuilding(floors);
     }
+
+    class FloorAreaDescComparator implements Comparator<Floor> {
+        @Override
+        public int compare(Floor o1, Floor o2) {
+            if (o1.getAreaTotal() < o2.getAreaTotal()) {
+                return 1;
+            } else if (o1.getAreaTotal() > o2.getAreaTotal()) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    class SpaceRoomsDescComparator implements Comparator<Space> {
+        @Override
+        public int compare(Space o1, Space o2) {
+            if (o1.getRoomsQuantity() < o2.getRoomsQuantity()) {
+                return 1;
+            } else if (o1.getRoomsQuantity() > o2.getRoomsQuantity()) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+    }
+
 }
