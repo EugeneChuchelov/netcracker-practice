@@ -6,11 +6,11 @@ import buildings.dwelling.Dwelling;
 
 public class HotelBuilding extends Dwelling {
 
-    public HotelBuilding(int floorsQuantity, int[] flatsOnFloor) {
+    public HotelBuilding(int floorsQuantity, int... flatsOnFloor) {
         super(floorsQuantity, flatsOnFloor);
     }
 
-    public HotelBuilding(Floor[] floors) {
+    public HotelBuilding(Floor... floors) {
         super(floors);
     }
 

@@ -9,6 +9,8 @@ import buildings.utils.Buildings;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
@@ -29,7 +31,6 @@ public class Window extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        //Container container = this.getContentPane();
         getContentPane().setLayout(new GridLayout(1, 4));
 
         initMenu();

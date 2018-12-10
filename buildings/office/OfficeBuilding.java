@@ -22,13 +22,13 @@ public class OfficeBuilding implements Building, Serializable, Cloneable {
     private int size;
     private ListNode head;
 
-    public OfficeBuilding(int floors, int[] officesOnFloors){
+    public OfficeBuilding(int floors, int... officesOnFloors){
         for(int i = 0; i < floors; i++){
             addNode(i, new ListNode(new OfficeFloor(officesOnFloors[i])));
         }
     }
 
-    public OfficeBuilding(Floor[] floors){
+    public OfficeBuilding(Floor... floors){
         for(int i = 0; i< floors.length; i++){
             addNode(i, new ListNode(floors[i]));
         }

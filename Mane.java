@@ -5,6 +5,7 @@ import buildings.interfaces.Building;
 import buildings.interfaces.Floor;
 import buildings.interfaces.Space;
 import buildings.utils.Buildings;
+import swingGUI.Window;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -13,7 +14,8 @@ import java.util.Scanner;
 
 public class Mane {
     public static void main(String[] args) throws IOException {
-
+        //Window window = new Window();
+        //window.setVisible(true);
         /*
         Scanner scanner = new Scanner(System.in);
         System.out.println("Class name: ");
@@ -56,21 +58,47 @@ public class Mane {
         Buildings.outputBuilding(bd, fos);
         Buildings.writeBuilding(bd, fwt);
         */
+        Building rbd1 = null;
+        Building rbd2 = null;
         try {
             Class spaceClass = Class.forName("buildings.office.Office");
             Class floorClass = Class.forName("buildings.dwelling.hotel.HotelFloor");
             Class buildingClass = Class.forName("buildings.dwelling.Dwelling");
 
             FileInputStream fis = new FileInputStream(new File("rfbt.bin"));
-            Building rbd1 = Buildings.inputBuilding(fis, spaceClass, floorClass, buildingClass);
+            rbd1 = Buildings.inputBuilding(fis, spaceClass, floorClass, buildingClass);
             System.out.println(rbd1.toString());
             System.out.println();
             FileReader frd = new FileReader(new File("rfbt.txt"));
-            Building rbd2 = Buildings.readBuilding(frd, spaceClass, floorClass, buildingClass);
+            rbd2 = Buildings.readBuilding(frd, spaceClass, floorClass, buildingClass);
             System.out.println(rbd2.toString());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        assert rbd1 != null;
+        System.out.println();
+        Floor[] floors = rbd2.toArray();
+        Space[] spaces = floors[1].toArray();
+        for(Floor floor : floors){
+            System.out.println(floor.toString());
+        }
+        floors = Buildings.sort(floors, (Floor o1, Floor o2) ->
+                Float.compare(o2.getAreaTotal(), o1.getAreaTotal()));
+        System.out.println();
+        for(Floor floor : floors){
+            System.out.println(floor.toString());
+        }
+        System.out.println();
+        for (Space space : spaces ){
+            System.out.println(space.toString());
+        }
+        spaces = Buildings.sort(spaces, (Space o1, Space o2) ->
+                Float.compare(o1.getArea(), o2.getArea()));
+        System.out.println();
+        for (Space space : spaces ){
+            System.out.println(space.toString());
+        }
+
     }
 }
 //16 5 4 40.0 4 40.0 1 10.0 2 20.0 3 30.0 6 4 40.0 4 40.0 1 10.0 4 40.0 2 20.0 3 30.0 5 4 40.0 4 40.0 1 10.0 2 20.0 3 30.0 6 4 40.0 4 40.0 1 10.0 4 40.0 2 20.0 3 30.0 5 4 40.0 4 40.0 1 10.0 2 20.0 3 30.0 6 4 40.0 4 40.0 1 10.0 4 40.0 2 20.0 3 30.0 5 4 40.0 4 40.0 1 10.0 2 20.0 3 30.0 6 4 40.0 4 40.0 1 10.0 4 40.0 2 20.0 3 30.0 5 4 40.0 4 40.0 1 10.0 2 20.0 3 30.0 6 4 40.0 4 40.0 1 10.0 4 40.0 2 20.0 3 30.0 5 4 40.0 4 40.0 1 10.0 2 20.0 3 30.0 6 4 40.0 4 40.0 1 10.0 4 40.0 2 20.0 3 30.0 5 4 40.0 4 40.0 1 10.0 2 20.0 3 30.0 6 4 40.0 4 40.0 1 10.0 4 40.0 2 20.0 3 30.0 5 4 40.0 4 40.0 1 10.0 2 20.0 3 30.0 6 4 40.0 4 40.0 1 10.0 4 40.0 2 20.0 3 30.0

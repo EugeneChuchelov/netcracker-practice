@@ -18,7 +18,7 @@ public class DwellingFloor implements Floor, Serializable, Cloneable {
         }
     }
 
-    public DwellingFloor(Space[] flats) {
+    public DwellingFloor(Space... flats) {
         this.flats = new Space[flats.length];
         System.arraycopy(flats, 0, this.flats, 0, flats.length);
         size = flats.length;

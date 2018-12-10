@@ -11,14 +11,14 @@ import java.io.Serializable;
 public class Dwelling implements Building, Serializable, Cloneable {
     private Floor[] floors;
 
-    public Dwelling(int floorsQuantity, int[] flatsOnFloor){
+    public Dwelling(int floorsQuantity, int... flatsOnFloor){
         floors = new Floor[floorsQuantity];
         for(int i = 0; i < floors.length; i++){
             floors[i] = new DwellingFloor(flatsOnFloor[i]);
         }
     }
 
-    public Dwelling(Floor[] floors) {
+    public Dwelling(Floor... floors) {
         this.floors = new Floor[floors.length];
         System.arraycopy(floors, 0, this.floors, 0, floors.length);
     }

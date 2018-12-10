@@ -25,7 +25,7 @@ public class OfficeFloor implements Floor, Serializable, Cloneable {
         }
     }
 
-    public OfficeFloor(Space[] offices){
+    public OfficeFloor(Space... offices){
         for (int i = 0; i < offices.length; i++){
             addNode(i, new ListNode(offices[i]));
         }
